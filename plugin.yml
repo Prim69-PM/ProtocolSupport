@@ -1,0 +1,5 @@
+name: ProtocolSupport
+version: 1.0.0
+main: Prim\ProtocolSupport\Main
+author: Prim
+api: 3.22.0
