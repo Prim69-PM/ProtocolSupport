@@ -1,6 +1,6 @@
 <?php
 
-namespace Prim\ProtocolSupport\Protocol\v419;
+namespace Prim\ProtocolSupport\Protocol\v428;
 
 use pocketmine\nbt\NetworkLittleEndianNBTStream;
 use pocketmine\network\mcpe\protocol\StartGamePacket;
@@ -9,7 +9,9 @@ use pocketmine\network\mcpe\protocol\types\Experiments;
 use pocketmine\network\mcpe\protocol\types\ItemTypeEntry;
 use pocketmine\network\mcpe\protocol\types\SpawnSettings;
 
-class StartGamePacket419 extends StartGamePacket {
+class StartGamePacket428 extends StartGamePacket {
+
+	public int $playerMovementType;
 
 	// thanks ethan for doing this a long time ago! (is this even the right one)
 	public static function from(StartGamePacket $packet) : self {
@@ -64,7 +66,7 @@ class StartGamePacket419 extends StartGamePacket {
 		$s->worldName = $packet->worldName;
 		$s->premiumWorldTemplateId = $packet->premiumWorldTemplateId;
 		$s->isTrial = $packet->isTrial;
-		$s->playerMovementType = $packet->playerMovementType;
+		$s->playerMovementType = $packet->playerMovementSettings->getMovementType();
 		$s->currentTick = $packet->currentTick;
 		$s->enchantmentSeed = $packet->enchantmentSeed;
 		$s->multiplayerCorrelationId = $packet->multiplayerCorrelationId;

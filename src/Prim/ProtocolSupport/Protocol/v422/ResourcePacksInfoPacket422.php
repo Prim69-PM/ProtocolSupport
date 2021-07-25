@@ -1,10 +1,10 @@
 <?php
 
-namespace Prim\ProtocolSupport\Protocol\v419;
+namespace Prim\ProtocolSupport\Protocol\v422;
 
 use pocketmine\network\mcpe\protocol\ResourcePacksInfoPacket;
 
-class ResourcePacksInfoPacket419 extends ResourcePacksInfoPacket {
+class ResourcePacksInfoPacket422 extends ResourcePacksInfoPacket {
 
 	protected function decodePayload(){
 		$this->mustAccept = $this->getBool();

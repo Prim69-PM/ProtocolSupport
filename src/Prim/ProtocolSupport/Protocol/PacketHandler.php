@@ -3,11 +3,24 @@
 namespace Prim\ProtocolSupport\Protocol;
 
 use pocketmine\network\mcpe\protocol\DataPacket;
+use pocketmine\Player;
 
 abstract class PacketHandler {
 
-	abstract function handleInbound(DataPacket $packet) : void;
+	/**
+	 * @param Player $player
+	 * @param DataPacket $packet
+	 * @return bool
+	 * Returns true if a packet has been handled
+	 */
+	abstract function handleInbound(Player $player, DataPacket $packet) : bool;
 
-	abstract function handleOutbound(DataPacket $packet) : void;
+	/**
+	 * @param Player $player
+	 * @param DataPacket $packet
+	 * @return bool
+	 * Returns true if a packet has been handled
+	 */
+	abstract function handleOutbound(Player $player, DataPacket $packet) : bool;
 
 }
