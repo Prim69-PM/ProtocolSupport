@@ -9,14 +9,12 @@ use pocketmine\network\mcpe\protocol\types\PlayerListEntry;
 use pocketmine\network\mcpe\protocol\types\SkinAnimation;
 use pocketmine\network\mcpe\protocol\types\SkinData;
 use pocketmine\network\mcpe\protocol\types\SkinImage;
-use pocketmine\network\mcpe\protocol\PacketDecodeException;
 use Prim\ProtocolSupport\Protocol\v428\SkinData428;
 
 class PlayerListPacket419 extends PlayerListPacket {
 
-	public function getSkin() : SkinData {
+	public function getSkin() : SkinData{
 		$skinId = $this->getString();
-		$this->getString();
 		$skinResourcePatch = $this->getString();
 		$skinData = $this->getSkinImage();
 		$animationCount = $this->getLInt();
@@ -66,60 +64,56 @@ class PlayerListPacket419 extends PlayerListPacket {
 		return new SkinData428($skinId, $skinResourcePatch, $skinData, $animations, $capeData, $geometryData, $animationData, $premium, $persona, $capeOnClassic, $capeId, $fullSkinId, $armSize, $skinColor, $personaPieces, $pieceTintColors);
 	}
 
-	private function getSkinImage() : SkinImage{
-		$width = $this->getLInt();
-		$height = $this->getLInt();
-		$data = $this->getString();
-		try{
-			return new SkinImage($height, $width, $data);
-		}catch(\InvalidArgumentException $e){
-			throw new PacketDecodeException($e->getMessage(), 0, $e);
+	public function putSkin(SkinData $skin){
+		$this->putString($skin->getSkinId());
+		$this->putString($skin->getResourcePatch());
+		$this->putSkinImage($skin->getSkinImage());
+		$this->putLInt(count($skin->getAnimations()));
+		foreach($skin->getAnimations() as $animation){
+			$this->putSkinImage($animation->getImage());
+			$this->putLInt($animation->getType());
+			$this->putLFloat($animation->getFrames());
+		}
+		$this->putSkinImage($skin->getCapeImage());
+		$this->putString($skin->getGeometryData());
+		$this->putString($skin->getAnimationData());
+		$this->putBool($skin->isPremium());
+		$this->putBool($skin->isPersona());
+		$this->putBool($skin->isPersonaCapeOnClassic());
+		$this->putString($skin->getCapeId());
+		$this->putString($skin->getFullSkinId());
+		$this->putString($skin->getArmSize());
+		$this->putString($skin->getSkinColor());
+		$this->putLInt(count($skin->getPersonaPieces()));
+		foreach($skin->getPersonaPieces() as $piece){
+			$this->putString($piece->getPieceId());
+			$this->putString($piece->getPieceType());
+			$this->putString($piece->getPackId());
+			$this->putBool($piece->isDefaultPiece());
+			$this->putString($piece->getProductId());
+		}
+		$this->putLInt(count($skin->getPieceTintColors()));
+		foreach($skin->getPieceTintColors() as $tint){
+			$this->putString($tint->getPieceType());
+			$this->putLInt(count($tint->getColors()));
+			foreach($tint->getColors() as $color){
+				$this->putString($color);
+			}
 		}
 	}
 
-    public function putSkin(SkinData $skin){
-        $this->putString($skin->getSkinId());
-        $this->putString($skin->getResourcePatch());
-        $this->putSkinImage($skin->getSkinImage());
-        $this->putLInt(count($skin->getAnimations()));
-        foreach($skin->getAnimations() as $animation){
-            $this->putSkinImage($animation->getImage());
-            $this->putLInt($animation->getType());
-            $this->putLFloat($animation->getFrames());
-        }
-        $this->putSkinImage($skin->getCapeImage());
-        $this->putString($skin->getGeometryData());
-        $this->putString($skin->getAnimationData());
-        $this->putBool($skin->isPremium());
-        $this->putBool($skin->isPersona());
-        $this->putBool($skin->isPersonaCapeOnClassic());
-        $this->putString($skin->getCapeId());
-        $this->putString($skin->getFullSkinId());
-        $this->putString($skin->getArmSize());
-        $this->putString($skin->getSkinColor());
-        $this->putLInt(count($skin->getPersonaPieces()));
-        foreach($skin->getPersonaPieces() as $piece){
-            $this->putString($piece->getPieceId());
-            $this->putString($piece->getPieceType());
-            $this->putString($piece->getPackId());
-            $this->putBool($piece->isDefaultPiece());
-            $this->putString($piece->getProductId());
-        }
-        $this->putLInt(count($skin->getPieceTintColors()));
-        foreach($skin->getPieceTintColors() as $tint){
-            $this->putString($tint->getPieceType());
-            $this->putLInt(count($tint->getColors()));
-            foreach($tint->getColors() as $color){
-                $this->putString($color);
-            }
-        }
-    }
+	private function getSkinImage() : SkinImage {
+		$width = $this->getLInt();
+		$height = $this->getLInt();
+		$data = $this->getString();
+		return new SkinImage($height, $width, $data);
+	}
 
-    private function putSkinImage(SkinImage $image) : void{
-        $this->putLInt($image->getWidth());
-        $this->putLInt($image->getHeight());
-        $this->putString($image->getData());
-    }
+	private function putSkinImage(SkinImage $image) : void{
+		$this->putLInt($image->getWidth());
+		$this->putLInt($image->getHeight());
+		$this->putString($image->getData());
+	}
 
 	protected function decodePayload(){
 		$this->type = $this->getByte();

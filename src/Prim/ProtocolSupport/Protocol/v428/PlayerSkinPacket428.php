@@ -27,6 +27,7 @@ class PlayerSkinPacket428 extends PlayerSkinPacket {
 			$this->putSkinImage($animation->getImage());
 			$this->putLInt($animation->getType());
 			$this->putLFloat($animation->getFrames());
+			$this->putLInt($animation->getExpressionType()); //new
 		}
 		$this->putSkinImage($skin->getCapeImage());
 		$this->putString($skin->getGeometryData());

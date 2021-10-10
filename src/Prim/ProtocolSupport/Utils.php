@@ -12,8 +12,10 @@ use function get_class;
 class Utils {
 
 	public static RakLibInterface $interface;
+	public static bool $customPacket = false;
 
 	public static function sendSilentPacket(Player $player, DataPacket $packet, bool $needACK = false, bool $immediate = false) : bool {
+		self::$customPacket = true;
 		if(!$player->isConnected()) return false;
 
 		if(!$player->loggedIn && !$packet->canBeSentBeforeLogin()){

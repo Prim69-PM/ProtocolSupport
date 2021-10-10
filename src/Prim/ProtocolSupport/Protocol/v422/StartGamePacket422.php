@@ -1,6 +1,6 @@
 <?php
 
-namespace Prim\ProtocolSupport\Protocol\v428;
+namespace Prim\ProtocolSupport\Protocol\v422;
 
 use pocketmine\nbt\NetworkLittleEndianNBTStream;
 use pocketmine\network\mcpe\protocol\StartGamePacket;
@@ -9,11 +9,11 @@ use pocketmine\network\mcpe\protocol\types\Experiments;
 use pocketmine\network\mcpe\protocol\types\ItemTypeEntry;
 use pocketmine\network\mcpe\protocol\types\SpawnSettings;
 
-class StartGamePacket428 extends StartGamePacket {
+class StartGamePacket422 extends StartGamePacket {
 
 	public int $playerMovementType;
 
-	// thanks ethan for doing this a long time ago! (is this even the right one)
+	// thanks ethan for doing this a long time ago!
 	public static function from(StartGamePacket $packet) : self {
 		$s = new self;
 		$s->entityRuntimeId = $packet->entityRuntimeId;
@@ -76,9 +76,6 @@ class StartGamePacket428 extends StartGamePacket {
 		return $s;
 	}
 
-	public $rewindHistorySize = 0;
-	public $isServerAuthoritativeBlockBreaking = false;
-
 	protected function decodePayload(){
 		$this->entityUniqueId = $this->getEntityUniqueId();
 		$this->entityRuntimeId = $this->getEntityRuntimeId();
@@ -138,8 +135,6 @@ class StartGamePacket428 extends StartGamePacket {
 		$this->premiumWorldTemplateId = $this->getString();
 		$this->isTrial = $this->getBool();
 		$this->playerMovementType = $this->getVarInt();
-		$this->rewindHistorySize = $this->getVarInt();
-		$this->isServerAuthoritativeBlockBreaking = $this->getBool();
 		$this->currentTick = $this->getLLong();
 
 		$this->enchantmentSeed = $this->getVarInt();
@@ -222,8 +217,6 @@ class StartGamePacket428 extends StartGamePacket {
 		$this->putString($this->premiumWorldTemplateId);
 		$this->putBool($this->isTrial);
 		$this->putVarInt($this->playerMovementType);
-		$this->putVarInt($this->rewindHistorySize);
-		$this->putBool($this->isServerAuthoritativeBlockBreaking);
 		$this->putLLong($this->currentTick);
 
 		$this->putVarInt($this->enchantmentSeed);
