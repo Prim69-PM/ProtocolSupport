@@ -29,6 +29,7 @@ class EventListener implements Listener {
 		if($packet instanceof LoginPacket){
 			$this->main->sessions[$packet->username] = new Session($event->getPlayer(), $packet->protocol);
 			$packet->clientData['PlayFabId'] = '';
+			$packet->clientData['SkinGeometryDataEngineVersion'] = '';
 			$packet->protocol = ProtocolInfo::CURRENT_PROTOCOL;
 		} elseif($packet instanceof PacketViolationWarningPacket){
 			$name = PacketPool::getPacketById($packet->getPacketId())->getName();
